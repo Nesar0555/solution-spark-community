@@ -13,7 +13,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: () => void;
+  login: () => Promise<void>;
   logout: () => void;
   isLoading: boolean;
 }
@@ -33,20 +33,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(false);
   }, []);
 
-  const login = () => {
+  const login = async () => {
     // Simulate login - in a real app, this would be an API call
-    const mockUser: User = {
-      id: "user1",
-      name: "Alex Johnson",
-      email: "alex@example.com",
-      avatar: "https://i.pravatar.cc/150?u=alex",
-      points: 450,
-      level: "Problem Solver",
-      createdAt: new Date().toISOString()
-    };
-    
-    setUser(mockUser);
-    localStorage.setItem('solvehub_user', JSON.stringify(mockUser));
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        const mockUser: User = {
+          id: "user1",
+          name: "Alex Johnson",
+          email: "alex@example.com",
+          avatar: "https://i.pravatar.cc/150?u=alex",
+          points: 450,
+          level: "Problem Solver",
+          createdAt: new Date().toISOString()
+        };
+        
+        setUser(mockUser);
+        localStorage.setItem('solvehub_user', JSON.stringify(mockUser));
+        resolve();
+      }, 1000); // Simulating network delay
+    });
   };
 
   const logout = () => {
